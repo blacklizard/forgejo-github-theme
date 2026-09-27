@@ -98,24 +98,20 @@
       }
     }
   }
-  async function load() {
+  function load() {
     try {
       const nodes = new Map();
-      // The web route tree-list (the one the file picker already uses) is
-      // session-authenticated and unpaged; /api/v1 refuses browser sessions
-      // on an instance with REQUIRE_SIGNIN_VIEW = true.
-      const response = await fetch(tree.dataset.apiUrl);
-      if (!response.ok) throw new Error("Unable to load tree");
-      for (const filePath of await response.json()) {
+      const entries = document.getElementById("repo-source-tree-data").content.children;
+      for (const entry of entries) {
         let parent = nodes;
-        const segments = filePath.split("/");
+        const segments = entry.dataset.path.split("/");
         segments.forEach((name, index) => {
           const path = segments.slice(0, index + 1).join("/");
           if (!parent.has(name))
             parent.set(name, {
               name,
               path,
-              directory: index < segments.length - 1,
+              directory: index < segments.length - 1 || entry.dataset.directory === "true",
               children: new Map(),
             });
           parent = parent.get(name).children;
