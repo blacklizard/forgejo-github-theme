@@ -268,7 +268,8 @@ const dashboard = css`
 // 导航栏的工单/PR/里程碑仪表板
 const dashboardIssues = css`
   .page-content.dashboard.issues {
-    .list-header {
+    /* Forgejo gives the Project and Type dropdowns the class "list-header" too; without :not() this bar styling leaks onto them */
+    .list-header:not(.ui.dropdown) {
       background-color: ${themeVars.color.box.header};
       border: 1px solid ${themeVars.color.light.border};
       border-bottom: 0;
